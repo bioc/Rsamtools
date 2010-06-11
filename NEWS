@@ -21,5 +21,5 @@ NEW FEATURES
 
 BUG FIXES
 
-    o No changes classified as 'bug fixes' (package under active
-    development)
+    o 1.0.4 now scans / counts reads whose last nucleotide overlaps
+    the first position of a query
