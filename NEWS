@@ -23,3 +23,5 @@ BUG FIXES
 
     o 1.0.4 now scans / counts reads whose last nucleotide overlaps
     the first position of a query
+
+    o scanBam tag fields of type 'A' parsed correctly
