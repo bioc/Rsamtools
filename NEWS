@@ -20,6 +20,9 @@ BUG FIXES
 
     o scanBam tag fields of type 'A' parsed correctly
 
+    o v. 1.2.1: scanBamFlag isValidVendorRead had reversed TRUE/FALSE
+    logic
+
 CHANGES IN VERSION 1.0.0
 -----------------------
 
