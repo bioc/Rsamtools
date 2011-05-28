@@ -1,3 +1,12 @@
+CHANGES IN VERSION 1.4.2
+------------------------
+
+BUG FIXES
+
+    o scanFa fails when locations in a compressed fasta file are
+    accessed non-sequentially; perviously, incorrect sequences were
+    returned.
+
 CHANGES IN VERSION 1.4.0
 ------------------------
 
