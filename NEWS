@@ -1,3 +1,10 @@
+CHANGES IN VERSION 1.6.1
+------------------------
+
+BUG FIXES
+
+    o readBamGappedAlignments handles tags without entries
+
 CHANGES IN VERSION 1.6.0
 ------------------------
 
