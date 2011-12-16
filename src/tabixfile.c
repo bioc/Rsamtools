@@ -111,7 +111,8 @@ SEXP index_tabix(SEXP filename, SEXP format, SEXP seq, SEXP begin, SEXP end,
         conf.line_skip = INTEGER(skip)[0];
     if (IS_CHARACTER(comment) && 1L == Rf_length(comment))
         conf.meta_char = CHAR(STRING_ELT(comment, 0))[0];
-    if (IS_LOGICAL(zeroBased) && 1L == Rf_length(zeroBased))
+    if (IS_LOGICAL(zeroBased) && 1L == Rf_length(zeroBased) &&
+        TRUE == LOGICAL(zeroBased)[0])
         conf.preset |= TI_FLAG_UCSC;
 
     if (1 != bgzf_check_bgzf(fname))
@@ -242,7 +243,9 @@ SEXP scan_tabix(SEXP ext, SEXP space, SEXP yieldSize)
         const char *s = CHAR(STRING_ELT(spc, ispc));
         if (0 > (tid = ti_get_tid(tabix->idx, s)))
             Rf_error("'%s' not present in tabix index", s);
-        ti_iter_t iter = ti_iter_query(tabix->idx, tid, start[ispc], end[ispc]);
+        int beg = start[ispc];
+        if (0 < beg) beg -= 1;
+        ti_iter_t iter = ti_queryi(tabix, tid, beg, end[ispc]);
 
         int linelen;
         const char *line;
