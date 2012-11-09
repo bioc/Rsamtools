@@ -40,9 +40,11 @@ void _zip_close(int infd, int outfd)
     if (-1L == close(infd))
         _zip_error("closing input after compression: %s",
                    strerror(errno), infd, outfd);
-    if (-1L == close(outfd))
-        Rf_error("closing output after compression: %s",
-                 strerror(errno));
+    if (outfd >= 0) {
+	if (-1L == close(outfd))
+	    Rf_error("closing output after compression: %s",
+		     strerror(errno));
+    }
 }
 
 SEXP bgzip(SEXP file, SEXP dest)
@@ -68,7 +70,13 @@ SEXP bgzip(SEXP file, SEXP dest)
 
     if (0 > bgzf_close(outp))
         Rf_error("closing compressed output");
-    _zip_close(infd, outfd);
+#ifdef _USE_KNETFILE
+    fclose(outp->x.fpw);
+#else
+    fclose(outp->file);
+#endif
+    
+    _zip_close(infd, -1);
 
     return dest;
 }
