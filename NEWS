@@ -1,3 +1,10 @@
+CHANGES IN VERSION 1.12.2
+-------------------------
+
+BUG FIXES
+
+    o close razip files only once
+
 CHANGES IN VERSION 1.12.0
 -------------------------
 
