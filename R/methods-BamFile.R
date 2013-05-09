@@ -334,31 +334,32 @@ setMethod(readBamGAlignmentsList, "BamFile",
     if ("package:parallel" %in% search() & .Platform$OS.type != "windows")
         lapply <- parallel::mclapply
 
-    lst <- lapply(seq_along(reads), function(i, reads) {
-        bf <- reads[[i]]
-        if (!isOpen(bf)) {
-            open(bf)
-            on.exit(close(bf))
-        }
-        ## singleEnd=TRUE -> output GappedAlignments
-        if (singleEnd)
-            ct <- .countWithYieldSize(readBamGappedAlignments, bf, param,
-                                      features, mode, ignore.strand)
-        ## singleEnd=FALSE -> output GappedAlignmentPairs
-        if (!singleEnd) {
-            ## paired-end, file sorted by qname
-            if (isTRUE(obeyQname(bf))) {
-                ct <- .countWithYieldSize(readBamGappedAlignmentPairs, bf,
-                                          param, features, mode, ignore.strand)
-            ## paired-end, file not sorted 
-            } else {
-                x <- grglist(readBamGappedAlignmentPairs(bf, param=param))
-                ct <- .dispatchOverlaps(x, features, mode=mode, 
-                                       ignore.strand=ignore.strand)
-            }
-        }
-        ct
-    }, reads)
+    lst <- lapply(seq_along(reads), 
+               function(i, reads, features, mode, ignore.strand, param) {
+                   bf <- reads[[i]]
+                   if (!isOpen(bf)) {
+                       open(bf)
+                       on.exit(close(bf))
+                   }
+                   ## singleEnd=TRUE -> output GappedAlignments
+                   if (singleEnd)
+                       ct <- .countWithYieldSize(readBamGappedAlignments, bf, param,
+                                                 features, mode, ignore.strand)
+                   ## singleEnd=FALSE -> output GappedAlignmentPairs
+                   if (!singleEnd) {
+                       ## paired-end, file sorted by qname
+                       if (isTRUE(obeyQname(bf))) {
+                           ct <- .countWithYieldSize(readBamGappedAlignmentPairs, bf,
+                                                     param, features, mode, ignore.strand)
+                       ## paired-end, file not sorted 
+                       } else {
+                           x <- grglist(readBamGappedAlignmentPairs(bf, param=param))
+                           ct <- .dispatchOverlaps(x, features, mode=mode, 
+                                                  ignore.strand=ignore.strand)
+                       }
+                   }
+                   ct
+               }, reads, features, mode, ignore.strand, param)
 
     counts <- do.call(cbind, lst)
     colData <- DataFrame(fileName = reads)
