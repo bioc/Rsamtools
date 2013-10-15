@@ -12,7 +12,7 @@ BamFileList <-
 .summarizeOverlaps_character <-
     function(features, reads, mode, ignore.strand=FALSE, ...,
         yieldSize=1000000L, inter.feature=TRUE, singleEnd=TRUE,
-        fragments=TRUE, param=ScanBamParam())
+        fragments=FALSE, param=ScanBamParam())
 {
     if (is.null(names(reads))) {
         if (any(duplicated(reads)))
@@ -34,11 +34,12 @@ setMethod("summarizeOverlaps", c("GRangesList", "character"),
 
 .summarizeOverlaps_BamFileList <-
     function(features, reads, mode, ignore.strand=FALSE, ..., 
-             inter.feature=TRUE, singleEnd=TRUE, fragments=TRUE,
+             inter.feature=TRUE, singleEnd=TRUE, fragments=FALSE,
              param=ScanBamParam())
 {
     if (any(duplicated(names(reads))))
         stop("duplicate 'names(reads)' not allowed")
+    .checkArgs(reads, singleEnd, fragments)
     .dispatchBamFiles(features, reads, mode, ignore.strand, ..., 
                       inter.feature=inter.feature, singleEnd=singleEnd, 
                       fragments=fragments, param=param)
