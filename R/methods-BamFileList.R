@@ -60,7 +60,7 @@ setMethod(obeyQname, "BamFileList",
 setReplaceMethod("obeyQname", "BamFileList", 
     function(object, ..., value)
 {
-    endoapply(object, "obeyQname<-", value=value)
+    endoapply(object, `obeyQname<-`, value=value)
 })
 
 setMethod(asMates, "BamFileList",
@@ -72,5 +72,5 @@ setMethod(asMates, "BamFileList",
 setReplaceMethod("asMates", "BamFileList", 
     function(object, ..., value)
 {
-    endoapply(object, "asMates<-", value=value)
+    endoapply(object, `asMates<-`, value=value)
 })
