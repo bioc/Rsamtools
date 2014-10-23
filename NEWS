@@ -1,3 +1,9 @@
+CHANGES IN VERSION 1.18.1
+
+BUG FIXES
+
+    o Do not segfault on parsing cigars > 32767 characters
+
 CHANGES IN VERSION 1.17.0
 -------------------------
 
