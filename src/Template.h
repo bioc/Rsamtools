@@ -67,8 +67,8 @@ public:
     // 3. Bit 0x10 and 0x20: Segments are on opposite strands
     // 4. Bit 0x2: Both proper OR both not proper 
     // 5. mpos match:
-    //      segment1 mpos matches segment2 pos AND
-    //      segment2 mpos matches segment1 pos
+    //      bit 0x10 of rec1 == bit 0x20 of rec2 AND
+    //      bit 0x10 or rec2 == bit 0x20 of rec1
     // 6. tid match
     bool is_mate(const bam1_t *bam, const bam1_t *mate) const {
         const bool bam_read1 = bam->core.flag & BAM_FREAD1;
@@ -87,8 +87,8 @@ public:
             ((bam_read1 ^ bam_read2) && (mate_read1 ^ mate_read2)) &&
             (bam_read1 != mate_read1) &&
             (bam_secondary == mate_secondary) &&
-            (bam_rev != mate_rev) &&
-            ((bam_mrev == mate_rev) || (bam_rev == mate_mrev)) &&
+            (((bam_rev != mate_mrev) && (bam_mrev != mate_rev)) || 
+            ((bam_rev == mate_mrev) && (bam_mrev == mate_rev))) &&
             (bam_proper == mate_proper) && 
             (bam->core.pos == mate->core.mpos) && 
             (bam->core.mpos == mate->core.pos) &&
