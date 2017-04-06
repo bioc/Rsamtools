@@ -206,9 +206,10 @@ static SEXP _bamtags_B(uint8_t *s) {
 static void _bamtags(const bam1_t * bam, BAM_DATA bd, SEXP tags)
 {
     SCAN_BAM_DATA sbd = (SCAN_BAM_DATA) bd->extra;
-    static char *buf_A;
+    static char buf_A[2];
     int idx = sbd->icnt;
     SEXP nms = GET_ATTR(tags, R_NamesSymbol);
+    buf_A[1] = '\0';
     for (int i = 0; i < LENGTH(nms); ++i) {
         const char *tagname = CHAR(STRING_ELT(nms, i));
         uint8_t *aux = bam_aux_get(bam, tagname);
@@ -239,10 +240,6 @@ static void _bamtags(const bam1_t * bam, BAM_DATA bd, SEXP tags)
                 tag = NEW_CHARACTER(n);
                 for (int j = 0; j < n; ++j)
                     SET_STRING_ELT(tag, j, NA_STRING);
-                if ('A' == aux[0]) {
-                    buf_A = R_alloc(2, sizeof(char));
-                    buf_A[1] = '\0';
-                }
                 break;
             case 'H':
                 tag = NEW_RAW(n);

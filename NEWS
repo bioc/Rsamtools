@@ -1,3 +1,11 @@
+CHANGES IN VERSION 1.26
+-----------------------
+
+BUG FIXES
+
+    o (version 1.26.2) scanBam() accepts a single tag mixing 'Z' and
+      'A' format. See https://support.bioconductor.org/p/94553/
+
 CHANGES IN VERSION 1.25
 -----------------------
 
